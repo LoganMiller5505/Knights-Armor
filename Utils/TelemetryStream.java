@@ -10,7 +10,7 @@ public class TelemetryStream {
 
     private static ArrayList<String> telemToDisplay = new ArrayList<>();
 
-    public static void initTelemetryStream(Telemetry telemetry){
+    public static void init(Telemetry telemetry){
         TelemetryStream.telemetry = telemetry;
     }
 
