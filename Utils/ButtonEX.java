@@ -10,6 +10,8 @@ public class ButtonEX {
     private boolean held;
     private boolean release;
 
+    private boolean prevState = false;
+
     public ButtonEX(String name, boolean isBool){
         this.name = name;
         this.isBool = isBool;
@@ -27,6 +29,17 @@ public class ButtonEX {
     }
     public boolean isRelease(){
         return release;
+    }
+
+    public boolean isBool(){
+        return isBool;
+    }
+
+    public boolean getPrevState(){
+        return release;
+    }
+    public void setPrevState(boolean b){
+        prevState = b;
     }
 
     public void setPress(boolean b){
