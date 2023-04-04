@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.Utils;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+//TODO: Figure out how JavaDoc formatting works and add better comments! (Oops)
 public class GamepadEX {
 
     //"Maps" for each value's place in the button array list
@@ -12,7 +14,7 @@ public class GamepadEX {
     public static final int b = 1;
 
     //Array list of all pressable buttons
-    public ArrayList<ButtonEX> buttons = new ArrayList<ButtonEX> (Arrays.asList(
+    private final ArrayList<ButtonEX> buttons = new ArrayList<> (Arrays.asList(
             new ButtonEX("a", true),
             new ButtonEX("b", true),
             new ButtonEX("dpad_down", false),
@@ -40,7 +42,7 @@ public class GamepadEX {
     private double thresh;
 
     //Thread for updating Gamepad values
-    //TODO: Have this thread stop when isStopRequested. Will probably need to pass/access "opMode" in this class
+    //TODO: Have this thread stop when isStopRequested. Will probably need to pass/access "opMode" in this class (a bit of a class organizational pain)
     private Thread updateThread;
 
     //Default constructor with standard activityThreshold value
@@ -48,53 +50,83 @@ public class GamepadEX {
         this(gp,0.125);
     }
 
-    //Big messy consturctor :D definitely needs a review and test to see A) If it works, and B) How it can be optimized (because this is NOT optimized right now.)
+    //Big messy constructor with fun time thread :D much better optimized than before but (likely) may be able to be improved still
     public GamepadEX(Gamepad gp, double activityThreshold){
-        thresh = activityThreshold;
+
+        this.rawGp=gp;
+        this.thresh = activityThreshold;
+
         updateThread = new Thread(() -> {
             while(true){
-                for(ButtonEX button: buttons){
-                    if(button.isBool()){
-                        try {
-                            boolean b = false;
-                            b = rawGp.getClass().getDeclaredField(button.getName()).getBoolean(b); //TODO: Does this actually work? I am using java in ways I never have before and I am lost.
-                            button.setPress(b);
+                for(ButtonEX b: buttons){
 
-                            if(button.isPress()==button.getPrevState()){
-                                button.setHeld(true);
-                            }
+                    Field state;
+                    boolean engaged;
 
-                            button.setPrevState(b);
+                    try {
+                        state = gp.getClass().getDeclaredField(b.getName());
+                    } catch (NoSuchFieldException e) { //NOTE: THIS SHOULD NEVER HAPPEN since we are working with the limited, final ArrayList "buttons" here unless you manually come in and mess it up
+                        throw new RuntimeException(e);
+                    }
 
-                        } catch (NoSuchFieldException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
+                    if(b.isBool()){
+                        engaged = state.equals(true);
                     }
                     else{
-                        try {
-                            float f = 0.0f;
-                            boolean b = rawGp.getClass().getDeclaredField(button.getName()).getFloat(f) > activityThreshold; //TODO: Does this actually work? I am using java in ways I never have before and I am lost.
-                            button.setPress(b);
-
-                            if(button.isPress()==button.getPrevState()){
-                                button.setHeld(true);
-                            }
-
-                            button.setPrevState(b);
-
-                        } catch (NoSuchFieldException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
+                        engaged = Float.parseFloat(state.toString()) > thresh;
                     }
 
+                    b.setPress(engaged);
+
+                    if(b.isPress()==b.getPrevState()){
+                        b.setHeld(true);
+                    }
+                    else if(b.isPress()==false){
+                        b.setRelease(true);
+                    }
+
+                    b.setPrevState(engaged);
+
                 }
+
             }
         });
         updateThread.start();
+    }
+
+    public boolean isPress(String s){
+        for(ButtonEX b: buttons){
+            if(b.getName().equals(s)){
+                return b.isPress();
+            }
+        }
+        return false;
+    }
+
+    public boolean isHeld(String s){
+        for(ButtonEX b: buttons){
+            if(b.getName().equals(s)){
+                return b.isHeld();
+            }
+        }
+        return false;
+    }
+
+    public boolean isRelease(String s){
+        for(ButtonEX b: buttons){
+            if(b.getName().equals(s)){
+                return b.isRelease();
+            }
+        }
+        return false;
+    }
+
+    public void pauseInputListening() throws InterruptedException {
+        updateThread.wait();
+    }
+
+    public void resumeInputListening(){
+        updateThread.notifyAll();
     }
 
 
