@@ -6,14 +6,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//TODO: Figure out how JavaDoc formatting works and add better comments! (Oops)
+/**
+ * Enhanced GamePad functionality.
+ * Utilizes multi-threading to update the press, held, and release boolean states of all
+ * TODO: Have the thread stop when isStopRequested
+ * TODO: Add functionality for retrieving (and modifying with some reference function) floating point number returns
+ */
 public class GamepadEX {
 
-    //"Maps" for each value's place in the button array list
-    public static final int a = 0;
-    public static final int b = 1;
-
-    //Array list of all pressable buttons
+    /**
+     * Array list of all pressable buttons
+     */
     private final ArrayList<ButtonEX> buttons = new ArrayList<> (Arrays.asList(
             new ButtonEX("a", true),
             new ButtonEX("b", true),
@@ -35,22 +38,34 @@ public class GamepadEX {
             new ButtonEX("y", true)
     ));
 
-    //FTC's Gamepad Object
+    /**
+     * FTC's default gamepad object
+     */
     private Gamepad rawGp;
 
-    //Threshold for Float values of gamepad buttons to be considered "active"
+    /**
+     * Threshold for Float values of gamepad buttons to be considered "active"
+     */
     private double thresh;
 
-    //Thread for updating Gamepad values
-    //TODO: Have this thread stop when isStopRequested. Will probably need to pass/access "opMode" in this class (a bit of a class organizational pain)
+    /**
+     * Thread for updating Gamepad values
+     */
     private Thread updateThread;
 
-    //Default constructor with standard activityThreshold value
+    /**
+     * Default case constructor, with standard activityThreshold value being 0.125
+     * @param gp FTC Gamepad Object
+     */
     public GamepadEX(Gamepad gp){
         this(gp,0.125);
     }
 
-    //Big messy constructor with fun time thread :D much better optimized than before but (likely) may be able to be improved still
+    /**
+     * Loaded constructor, with overridable activityThreshold value
+     * @param gp FTC Gamepad Object
+     * @param activityThreshold Custom threshold to consider a float input "active"
+     */
     public GamepadEX(Gamepad gp, double activityThreshold){
 
         this.rawGp=gp;
@@ -94,37 +109,59 @@ public class GamepadEX {
         updateThread.start();
     }
 
-    public boolean isPress(String s){
+    /**
+     * Check whether a specific button ID is pressed or not
+     * @param ID ID of the button
+     * @return Boolean of if the button has been pressed (and is NOT being held)
+     */
+    public boolean isPress(String ID){
         for(ButtonEX b: buttons){
-            if(b.getName().equals(s)){
+            if(b.getName().equals(ID)){
                 return b.isPress();
             }
         }
         return false;
     }
 
-    public boolean isHeld(String s){
+    /**
+     * Check whether a specific button ID is held or not
+     * @param ID ID of the button
+     * @return Boolean of if the button is being held (irrespective of active/inactive state)
+     */
+    public boolean isHeld(String ID){
         for(ButtonEX b: buttons){
-            if(b.getName().equals(s)){
+            if(b.getName().equals(ID)){
                 return b.isHeld();
             }
         }
         return false;
     }
 
-    public boolean isRelease(String s){
+    /**
+     * Check whether a specific button ID is released or not
+     * @param ID ID of the button
+     * @return Boolean of if the button has been released (and is NOT being held)
+     */
+    public boolean isRelease(String ID){
         for(ButtonEX b: buttons){
-            if(b.getName().equals(s)){
+            if(b.getName().equals(ID)){
                 return b.isRelease();
             }
         }
         return false;
     }
 
+    /**
+     * Pause the Gamepad input listening thread
+     * @throws InterruptedException This should never occur unless there is a serious problem with the thread that can only come about by manually screwing with it's initialization, but Java wants it here because Java
+     */
     public void pauseInputListening() throws InterruptedException {
         updateThread.wait();
     }
 
+    /**
+     * Resume the Gamepad input listening thread
+     */
     public void resumeInputListening(){
         updateThread.notifyAll();
     }
