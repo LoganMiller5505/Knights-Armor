@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode.Utils;
-
-import java.util.ArrayList;
+package org.firstinspires.ftc.teamcode.utils;
 
 public class StatisticCalc {
 
