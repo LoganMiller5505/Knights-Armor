@@ -5,25 +5,25 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class DualWebcam {
 
-    int height;
-    int width;
+    private int height;
+    private int width;
 
-    double FOV;
+    private double FOV;
 
-    double leftCamTilt;
-    double rightCamTilt;
+    private double leftCamTilt;
+    private double rightCamTilt;
 
-    double a;
-    double b;
+    private double a;
+    private double b;
 
-    OpenCvCamera leftCam;
-    OpenCvCamera rightCam;
+    private OpenCvCamera leftCam;
+    private OpenCvCamera rightCam;
 
-    ObjectDetectionPipeline leftPipeline;
-    ObjectDetectionPipeline rightPipeline;
+    private ObjectDetectionPipeline leftPipeline;
+    private ObjectDetectionPipeline rightPipeline;
 
-    OpenCvCameraRotation leftRotation = OpenCvCameraRotation.UPRIGHT;
-    OpenCvCameraRotation rightRotation = OpenCvCameraRotation.UPRIGHT;
+    private OpenCvCameraRotation leftRotation = OpenCvCameraRotation.UPRIGHT;
+    private OpenCvCameraRotation rightRotation = OpenCvCameraRotation.UPRIGHT;
 
     //TODO: CONSTRUCTOR CHAIN THINGS THAT COULD BE CONSTRUCTOR CHAINED
     /**
@@ -109,7 +109,7 @@ public class DualWebcam {
 
 
     /**
-     * @return The change in angle necessary for the center of the robot to be aligned to the detected object in both cameras
+     * @return The change in angle necessary for the center of the robot to be aligned to the detected object in both cameras (in radians)
      */
     public double findDTheta(){
 
