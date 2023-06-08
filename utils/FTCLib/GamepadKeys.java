@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils.FTCLib;
 
-/*
- *************************************************************************************
- *   NOTE: THIS IS VERY HEAVILY COPIED FROM FTCLIB'S GAMEPADKEYS CLASS.              *
- *                                                                                   *
- *   ALL CREDIT for all functionality here goes to the original authors of FTCLib.   *
- *************************************************************************************
+/**
+ * CREATED BY FTCLIB, NOT MYSELF
  */
-
 public class GamepadKeys {
 
     public enum Button {

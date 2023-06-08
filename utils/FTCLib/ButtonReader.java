@@ -2,16 +2,10 @@ package org.firstinspires.ftc.teamcode.utils.FTCLib;
 
 import java.util.function.BooleanSupplier;
 
-/*
- *************************************************************************************
- *   NOTE: THIS IS VERY HEAVILY COPIED FROM FTCLIB'S BUTTONREADER CLASS.             *
- *                                                                                   *
- *   ALL CREDIT for all functionality here goes to the original authors of FTCLib.   *
- *************************************************************************************
- */
-
 /**
  * Class that reads the value of button states.
+ *
+ * CREATED BY FTCLIB, NOT MYSELF.
  */
 public class ButtonReader implements KeyReader {
 

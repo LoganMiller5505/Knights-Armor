@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.vision;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+/**
+ * Class for easy implementation of a stereo-processing, dual webcam system
+ */
 public class DualWebcam {
 
     private int height;

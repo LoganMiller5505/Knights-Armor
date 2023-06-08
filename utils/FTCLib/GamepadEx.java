@@ -7,12 +7,10 @@ import org.firstinspires.ftc.teamcode.utils.FTCLib.GamepadKeys.Button;
 
 import java.util.HashMap;
 
-/*
-*************************************************************************************************************************************************************************************************
-*   NOTE: THIS IS VERY HEAVILY COPIED FROM FTCLIB'S GAMEPADEX CLASS. The primary addition is an exponential ramp feature for the , and the removal of command-based systems within the class.   *
-*                                                                                                                                                                                               *
-*   ALL CREDIT for all functionality here unless otherwise stated goes to the original authors of FTCLib.                                                                                       *
-*************************************************************************************************************************************************************************************************
+/**
+ * NOTE: THIS IS VERY HEAVILY COPIED FROM FTCLIB'S GAMEPADEX CLASS. The primary addition is an exponential ramp feature for the , and the removal of command-based systems within the class.   *
+ *                                                                                                                                                                                               *
+ * ALL CREDIT for all functionality here unless otherwise stated goes to the original authors of FTCLib.                                                                                       *
  */
 public class GamepadEx {
 
@@ -176,7 +174,6 @@ public class GamepadEx {
             return rawVal;
         }
         return Math.exp(rampBVal*(rawVal-rampStart))-(1-rampStart);
-
     }
 
     /**
@@ -188,8 +185,6 @@ public class GamepadEx {
             return rawVal;
         }
         return Math.exp(rampBVal*(rawVal-rampStart))-(1-rampStart);
-
-
     }
 
     /**
@@ -201,8 +196,6 @@ public class GamepadEx {
             return rawVal;
         }
         return Math.exp(rampBVal*(rawVal-rampStart))-(1-rampStart);
-
-
     }
 
     /**
@@ -214,8 +207,6 @@ public class GamepadEx {
             return rawVal;
         }
         return Math.exp(rampBVal*(rawVal-rampStart))-(1-rampStart);
-
-
     }
 
 
